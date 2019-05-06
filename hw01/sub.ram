@@ -1,0 +1,36 @@
+<input> 30 8
+read 1
+read 2
+load =0
+store 3
+load 2
+sub 1
+jgtz wrong_data
+loop:			;do {
+	load 3			;r3 = r3 + 1
+	add =1
+	store 3
+	load 1			;r1 = r1 - r2
+	sub 2
+	store 1
+	load 2			;r4 = r2 - r1
+	sub 1
+	store 4
+	jgtz rest
+	load 1
+jgtz loop		;} while (r1 > 0)
+write 3
+write 4
+jmp exit
+rest:
+	write 3
+	load 2
+	sub 4
+	store 4
+	write 4
+	jmp exit
+wrong_data:
+	write =0
+	write 1
+exit:
+	halt

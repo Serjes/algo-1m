@@ -1,0 +1,68 @@
+<input> 5 4 2 1 8 6
+read 1				; в r1 length
+load =10			; 
+store 2				; в r2 адрес первого элемента
+read_loop:
+	load 1
+	sub 2
+	add =10
+	jz sort
+	read *2
+	load 2
+	add =1
+	store 2			; в r2 адрес следующего элемента
+	jmp read_loop
+sort:
+				; for() r2 - счетчик первого цикла
+				; for() r3 - счетчик второго цикла
+	load =10		; в r2 адрес i-того элемента
+	store 2			
+	for_loop:	
+		load 1
+		sub 2
+		add =10		; проверили не кончились ли элементы
+		jz out_for_loop
+		load 2
+		add =1
+		store 3		; в r3 адрес j-того элемента с которым будем сравнивать
+		for2_loop:
+			load 1
+			sub 3
+			add =10		; проверили не кончились ли элементы
+			jz out_for2_loop		
+						; if ()	
+			load *3		; загрузим j-ый элемент для сравнения
+			sub *2		; сравниваем с элементом
+			jgtz else
+						; swap
+			load *2
+			store 4		; r4 временный регистр для обмена
+			load *3
+			store *2
+			load 4
+			store *3
+			else:
+			load 3		;окончание 2 цикла
+			add =1
+			store 3	
+			jmp for2_loop
+		out_for2_loop:
+		load 2			;окончание внешнего цикла
+		add =1
+		store 2	
+		jmp for_loop	
+out_for_loop:
+	load =10
+	store 2
+write_loop:
+	load 1
+	sub 2
+	add =10
+	jz exit
+	write *2
+	load 2
+	add =1
+	store 2
+	jmp write_loop
+exit:
+	halt

@@ -39,27 +39,14 @@ public class MatrixArray<T> implements IArray<T> {
         int pos = index % vector;
         int numVectors = size / vector; //общее количество веторов
         int posVectors = index / vector; //количество векторов до позиции вставки
-//        VectorArray<T> newVectorArray;
         for (int i = 0; i < numVectors - posVectors; i++) { //сдвиг на 1 во всех следующих векторах кроме того где вставка
             IArray<T> lastRow = array.get(size / vector - i);
-//            newVectorArray = new VectorArray<>(vector);
-//            arraycopy(lastRow, 0, newVectorArray, 1, vector - 1 );
-//            newVectorArray.add(array.get(size / vector - 1 - i).get(vector - 1), 0);
             lastRow.add(array.get(size / vector - 1 - i).get(vector - 1), 0);
-//            array.remove(size / vector - i); // далее замена вектора
-//            array.add(newVectorArray, size / vector - i);
         }
         IArray<T> curRow = array.get(size / vector - (numVectors - posVectors));
         curRow.add(item, pos);
         size++;
     }
-
-//    private void arraycopy(IArray<T> srcIArray, int srcPos, IArray<T> dstIArray, int destPos, int len) {
-//        for (int i = 0; i < len; i++) {
-//            dstIArray.add(srcIArray.get(srcPos + i));
-//        }
-//
-//    }
 
     @Override
     public T remove(int index) {

@@ -2,11 +2,11 @@ package model;
 
 import java.util.ArrayList;
 
-public class WrapArrayList<T> implements IArray<T> {
+public class ArrayListWrapper<T> implements IArray<T> {
 
     private ArrayList<T> array;
 
-    public WrapArrayList() {
+    public ArrayListWrapper() {
         array = new ArrayList<>();
     }
 

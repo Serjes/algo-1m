@@ -8,12 +8,15 @@ public class Main {
     public static final int TOTAL = 100_000;
 
     public static void main(String[] args) {
+//        PriorityQueue<Integer> queue = new PQueueWrapper<>();
         PriorityQueue<Integer> queue = new ListPQueue<>();
         queue.enqueue(0, 10);
         queue.enqueue(0, 12);
         queue.enqueue(0, 16);
-        queue.enqueue(2, 100);
-        queue.enqueue(3, 10);
+        queue.enqueue(2, 102);
+        queue.enqueue(3, 103);
+        queue.enqueue(1, 101);
+        System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
@@ -29,7 +32,7 @@ public class Main {
         IArray vectorArray = new VectorArray();
         IArray factorArray = new FactorArray();
         IArray matrixArray = new MatrixArray();
-        IArray arlistArray = new WrapArrayList();
+        IArray arlistArray = new ArrayListWrapper();
         testAddArray(singleArray, TOTAL);
         testAddArray(vectorArray, TOTAL);
         testAddArray(factorArray, TOTAL);

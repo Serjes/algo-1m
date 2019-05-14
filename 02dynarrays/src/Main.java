@@ -8,23 +8,9 @@ public class Main {
     public static final int TOTAL = 100_000;
 
     public static void main(String[] args) {
-//        PriorityQueue<Integer> queue = new PQueueWrapper<>();
-        PriorityQueue<Integer> queue = new ListPQueue<>();
-        queue.enqueue(0, 10);
-        queue.enqueue(0, 12);
-        queue.enqueue(0, 16);
-        queue.enqueue(2, 102);
-        queue.enqueue(3, 103);
-        queue.enqueue(1, 101);
-        System.out.println(queue.dequeue());
-        System.out.println(queue.dequeue());
-        System.out.println(queue.dequeue());
-        System.out.println(queue.dequeue());
-        System.out.println(queue.dequeue());
-        System.out.println(queue.dequeue());
-
-//        compareSpeed();
-//        testAddingAndRemovingByIndex();
+        compareSpeed();
+        testAddingAndRemovingByIndex();
+        testPriorityQueue();
     }
 
     private static void compareSpeed() {
@@ -38,6 +24,21 @@ public class Main {
         testAddArray(factorArray, TOTAL);
         testAddArray(matrixArray, TOTAL);
         testAddArray(arlistArray, TOTAL);
+    }
+
+    private static void testPriorityQueue() {
+//        PriorityQueue<Integer> queue = new PQueueWrapper<>();
+        PriorityQueue<Integer> queue = new ListPQueue<>();
+        queue.enqueue(0, 10);
+        queue.enqueue(0, 12);
+        queue.enqueue(0, 16);
+        queue.enqueue(2, 102);
+        queue.enqueue(3, 103);
+        queue.enqueue(1, 101);
+        queue.enqueue(3, 113);
+        for (int i = 0; i < 7; i++) {
+            System.out.println(queue.dequeue());
+        }
     }
 
     private static void testAddingAndRemovingByIndex() {

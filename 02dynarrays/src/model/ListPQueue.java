@@ -28,62 +28,60 @@ public class ListPQueue<T> implements PriorityQueue<T> {
     public T dequeue() {
         for (int i = 0; i < numberOfPriorities; i++) {
             if (!queue[i].isEmpty()) {
-                T q = (T) queue[i].get(0);
-                queue[i].remove(0);
-                return q;
+                return (T) queue[i].remove(0);
             }
         }
         return null;
     }
 
-    class PQLinkedList<T>{
+    class PQLinkedList<T> {
         private Node head;
         private int size;
 
-        public PQLinkedList() {
+        PQLinkedList() {
             head = null;
             size = 0;
         }
 
-        public boolean add(T element) {
+        void add(T element) {
             if (head == null) {
                 head = new Node(element);
             } else {
                 Node node = head;
-                for ( ; node.next != null; node = node.next) {}
+                while (node.next != null) {
+                    node = node.next;
+                }
                 node.next = new Node(element);
             }
             size++;
-            return true;
         }
 
-        public T get(int index) {
-            Node node = getNode(index);
-            return (T)node.content;
-        }
-
-        private Node getNode(int index) {
+        T get(int index) {
             if (index < 0 || index >= size) {
                 throw new IndexOutOfBoundsException();
             }
             Node node = head;
-            for (int i=0; i<index; i++) {
+            for (int i = 0; i < index; i++) {
                 node = node.next;
             }
-            return node;
+            return (T) node.content;
         }
 
-        public T remove(int index) {
+        T remove(int index) {
             T element = get(index);
             if (index == 0) {
                 head = head.next;
             } else {
-                Node node = getNode(index-1);
+                Node node = head;
+                for (int i = 0; i < index - 1; i++) {
+                    node = node.next;
+                }
                 node.next = node.next.next;
             }
             size--;
             return element;
         }
+
         public boolean isEmpty() {
             return size == 0;
         }
@@ -93,13 +91,9 @@ public class ListPQueue<T> implements PriorityQueue<T> {
         private T content;
         private Node next;
 
-        public Node(T content) {
+        Node(T content) {
             this.content = content;
             this.next = null;
-        }
-        public Node(T content, Node next) {
-            this.content = content;
-            this.next = next;
         }
     }
 

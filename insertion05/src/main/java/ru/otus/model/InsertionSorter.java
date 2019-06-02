@@ -1,6 +1,5 @@
-package model;
+package ru.otus.model;
 
-//public class InsertionSorter<T> implements ISorter<T> {
 public class InsertionSorter implements ISorter {
     @Override
     public void apply(int[] array) {

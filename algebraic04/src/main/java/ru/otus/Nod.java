@@ -3,34 +3,33 @@ package ru.otus;
 public class Nod {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
-        System.out.println(nod(123456789000L, 12L));
-        System.out.println(
-                (System.currentTimeMillis() - start));
+        System.out.println(gcd(123456789000L, 12L));
+        System.out.println((System.currentTimeMillis() - start) + " мс");
     }
 
 
-    public static long nod(long  a, long b) {
+    public static long gcd(long  a, long b) {
         while (a != b) {
             if (a > b){
-                a = a - b;
+                a -= b;
             }
             else {
-                b = b - a;
+                b -= a;
             }
         }
         return a;
     }
 
-    public static  long enhNod(long  a, long b){
-        while (a != b) {
+    public static  long enhancedGcd(long  a, long b){
+        while ((a != 0) && (b != 0)) {
             if (a > b){
-                a = a - b;
+                a = a % b;
             }
             else {
-                b = b - a;
+                b = b % a;
             }
         }
-        return a;
+        return a + b;
 
     }
 }

@@ -11,27 +11,29 @@ import java.util.concurrent.TimeUnit;
 @State(value = Scope.Thread)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class JMH {
+public class JMHpow {
 
     public static void main(String[] args) throws RunnerException {
-        Options opt = new OptionsBuilder().include(JMH.class.getSimpleName()).forks(1).build();
+        Options opt = new OptionsBuilder().include(JMHpow.class.getSimpleName()).forks(1).build();
         new Runner(opt).run();
     }
 
     @Setup
     public void setup() {
-
     }
 
     @Benchmark
-    public void nod() {
-
-        Nod.nod(123456789000L, 12L);
+    public void simplePow() {
+        Pow.simplePow(13, 11);
     }
 
     @Benchmark
-    public void enhNod() {
-        Nod.enhNod(123456789000L, 12L);
+    public void binaryPow() {
+        Pow.binaryPow(13, 11);
     }
 
+    @Benchmark
+    public void decompositionPow() {
+        Pow.binaryDecompositionPow(13, 11);
+    }
 }

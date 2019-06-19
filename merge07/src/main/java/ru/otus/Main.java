@@ -1,14 +1,17 @@
 package ru.otus;
 
 import ru.otus.model.ISorter;
+import ru.otus.model.MergeInsertionSorter;
 import ru.otus.model.MergeSorter;
+import ru.otus.model.QuickSorter;
 
 import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
 
-    public static final int ARRAY_SIZE = 4;
+//    public static final int ARRAY_SIZE = 5;
+    public static final int ARRAY_SIZE = 30;
 
     public static void main(String[] args) {
 
@@ -19,7 +22,8 @@ public class Main {
         }
 
         System.out.println(Arrays.toString(arr));
-        ISorter sorter = new MergeSorter();
+        ISorter sorter = new MergeInsertionSorter();
+//        ISorter sorter = new QuickSorter();
         sorter.apply(arr);
         System.out.println(Arrays.toString(arr));
     }

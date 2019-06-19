@@ -2,7 +2,10 @@ package ru.otus.model;
 
 import java.util.Arrays;
 
-public class MergeSorter implements ISorter {
+public class MergeInsertionSorter implements ISorter {
+
+    private InsertionSorter insertionSorter = new InsertionSorter();
+
     @Override
     public void apply(int[] array) {
         int[] copyOfArray = Arrays.copyOf(array, array.length);
@@ -10,7 +13,10 @@ public class MergeSorter implements ISorter {
     }
 
     private void splitMerge(int[] copy, int begin, int end, int[] array) {
-        if ((end - begin) < 2) return;
+        if ((end - begin) < 1000) {
+            insertionSorter.sort(array, begin, end);
+            return;
+        }
         int middle = (end + begin) / 2;
         splitMerge(array, begin, middle, copy);
         splitMerge(array, middle, end, copy);
@@ -20,7 +26,7 @@ public class MergeSorter implements ISorter {
     private void merge(int[] array, int begin, int middle, int end, int[] copy) {
         int first = begin;
         int second = middle;
-        for (int i = begin; i < end ; i++) {
+        for (int i = begin; i < end; i++) {
             if ((first < middle) && ((second >= end) || (array[first] <= array[second]))) {
                 copy[i] = array[first];
                 first++;

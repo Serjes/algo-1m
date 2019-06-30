@@ -5,4 +5,5 @@ public interface ITree<Key extends Comparable<Key>, Value> {
     void insert(Key k, Value v);
     void remove(Key k);
     void rebalance();
+    void printTree();
 }

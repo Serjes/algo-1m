@@ -114,47 +114,92 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
     }
 
     private void runToCalculateBalance(TreeLeaf leaf) {
-        int b = calculateBalance(leaf);
-        if (Math.abs(b) > 1) {
-//            leaf.balance = calculateBalance(leaf);
-//            if (b > 0) leftRotation(leaf, b);
-            if (b > 0) rightRotation(leaf, b);
-//            else rightRotation(leaf, b);
-            else leftRotation(leaf, b);
+        int balance = calculateBalance(leaf);
+        if (balance > 1) {
+            rightRotation(leaf);
+        } else if (balance < -1) {
+            leftRotation(leaf);
         } else {
             leaf.balance = calculateBalance(leaf);
         }
         if (leaf.parent != null) runToCalculateBalance(leaf.parent);
     }
 
-    private void rightRotation(TreeLeaf leaf, int balance) {
-        if ((leaf.left.right == null) || (leaf.left.right.height <= leaf.left.left.height)) smallRightRotation(leaf);
-        else bigRightRotation(leaf);
+    private void rightRotation(TreeLeaf leaf) {
+        if ((leaf.left.right == null) || ((leaf.left.left != null) && (leaf.left.right.height <= leaf.left.left.height))) {
+            smallRightRotation(leaf);
+        } else {
+            bigRightRotation(leaf);
+        }
     }
 
     private void smallRightRotation(TreeLeaf leaf) {
+        System.out.println("smallRightRotation");
         TreeLeaf a = leaf;
-        TreeLeaf b = leaf.left;
+        TreeLeaf b = null;
+        if (leaf.left != null) b = leaf.left;
         if (leaf.parent != null) {
-            leaf.parent.left = b;
-            b.parent = leaf.parent;
+            if (leaf.parent.left == leaf) {
+                leaf.parent.left = b;
+            } else {
+                leaf.parent.right = b;
+            }
+//            leaf.parent.left = b;
+            if (b != null) b.parent = leaf.parent;
         } else {
-            b.parent = null;
+            if (b != null) b.parent = null;
             root = b;
         }
         a.parent = b;
-        a.left = b.right;
-        b.right = a;
+        if (b != null) {
+            a.left = b.right;
+            b.right = a;
+        }
 
         runToCalculateHeight(a);
         runToCalculateBalance(a);
     }
 
     private void bigRightRotation(TreeLeaf leaf) {
-
+        System.out.println("bigRightRotation");
+        TreeLeaf a = leaf;
+//        TreeLeaf b = leaf.left;
+//        TreeLeaf c = leaf.left.right;
+        smallRightRotation(a);
+        smallRightRotation(a);
     }
 
-    private void leftRotation(TreeLeaf leaf, int balance) {
+    private void leftRotation(TreeLeaf leaf) {
+        if ((leaf.right.left == null) || ((leaf.right.right != null) && (leaf.right.left.height <= leaf.right.right.height))) {
+            smallLeftRotation(leaf);
+        } else {
+            bigLeftRotation(leaf);
+        }
+    }
+
+    private void smallLeftRotation(TreeLeaf leaf) {
+        System.out.println("smallLeftRotation");
+        TreeLeaf a = leaf;
+        TreeLeaf b = leaf.right;
+        if (leaf.parent != null) {
+            leaf.parent.right = b;
+            b.parent = leaf.parent;
+        } else {
+            b.parent = null;
+            root = b;
+        }
+        a.parent = b;
+        a.right = b.left;
+        b.left = a;
+
+        runToCalculateHeight(a);
+        runToCalculateBalance(a);
+    }
+
+    private void bigLeftRotation(TreeLeaf leaf) {
+        System.out.println("bigLeftRotation");
+//        smallLeftRotation(leaf);
+//        smallLeftRotation(leaf);
     }
 
     private int calculateBalance(TreeLeaf leaf) {
@@ -163,11 +208,8 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
 
     private int balance2Leaf(TreeLeaf l, TreeLeaf r){
         if(l == null && r == null) return 0;
-//        else if(l == null) return r.height;
         else if(l == null) return -r.height;
-//        else if(r == null) return -l.height;
         else if(r == null) return l.height;
-//        else return r.height - l.height;
         else return l.height - r.height;
     }
 }

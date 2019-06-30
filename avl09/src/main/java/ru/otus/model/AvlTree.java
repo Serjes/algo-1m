@@ -1,8 +1,18 @@
 package ru.otus.model;
 
+import org.apache.log4j.Logger;
+
+import java.util.function.BiFunction;
+
 public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, Value> {
-//    private int size = 0;
+    //    private int size = 0;
     private TreeLeaf root;
+
+    final static Logger logger = Logger.getLogger(AvlTree.class);
+
+    public TreeLeaf getRoot() {
+        return root;
+    }
 
     private class TreeLeaf {
         Key key;
@@ -21,7 +31,8 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
 
     @Override
     public void find(Key k) {
-
+        System.out.println("\nИщем по ключу = " + k);
+        runInOrder(root, k, this::findByKey);
     }
 
     @Override
@@ -31,21 +42,18 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
             root = newLeaf;
             root.height = 1;
             root.balance = 0;
-        }
-        else {
+        } else {
             TreeLeaf currentLeaf = root;
             TreeLeaf parent = null;
-            while(currentLeaf != null){
+            while (currentLeaf != null) {
                 int cmpResult = k.compareTo(currentLeaf.key);
                 if (cmpResult < 0) {
                     parent = currentLeaf;
                     currentLeaf = currentLeaf.left;
-                }
-                else if (cmpResult > 0) {
+                } else if (cmpResult > 0) {
                     parent = currentLeaf;
                     currentLeaf = currentLeaf.right;
-                }
-                else {
+                } else {
                     currentLeaf.value = v;
                     return;
                 }
@@ -81,20 +89,27 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
     @Override
     public void printTree() {
         System.out.print("root => ");
-        printLeaf(root);
-        runInOrder(root);
+        printLeaf(root, null);
+        runInOrder(root, null, this::printLeaf);
     }
 
-    private void runInOrder(TreeLeaf treeLeaf){
+    private void runInOrder(TreeLeaf treeLeaf, Key k, BiFunction<TreeLeaf, Key, Value> biFunction) {
         if (treeLeaf == null) return;
-        runInOrder(treeLeaf.left);
-        printLeaf(treeLeaf);
-        runInOrder(treeLeaf.right);
+        runInOrder(treeLeaf.left, null,  biFunction);
+        Value v = biFunction.apply(treeLeaf, k);
+        if (v != null) System.out.println("Value = " + v);
+        runInOrder(treeLeaf.right, null, biFunction);
     }
 
-    private void printLeaf(TreeLeaf treeLeaf) {
+    public Value printLeaf(TreeLeaf treeLeaf, Key k) {
         System.out.println("leaf key = " + treeLeaf.key + ", value = " + treeLeaf.value +
                 ", height = " + treeLeaf.height + ", balance = " + treeLeaf.balance);
+        return null;
+    }
+
+    private Value findByKey(TreeLeaf treeLeaf, Key k) {
+        if (treeLeaf.key == k) return treeLeaf.value;
+        else return null;
     }
 
     private void runToCalculateHeight(TreeLeaf leaf) {
@@ -106,10 +121,10 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
         return height2Leaf(leaf.left, leaf.right) + 1;
     }
 
-    private int height2Leaf(TreeLeaf x, TreeLeaf y){
-        if(x == null && y == null) return 0;
-        else if(x == null) return y.height;
-        else if(y == null) return x.height;
+    private int height2Leaf(TreeLeaf x, TreeLeaf y) {
+        if (x == null && y == null) return 0;
+        else if (x == null) return y.height;
+        else if (y == null) return x.height;
         else return Math.max(x.height, y.height);
     }
 
@@ -134,10 +149,11 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
     }
 
     private void smallRightRotation(TreeLeaf leaf) {
-        System.out.println("smallRightRotation");
+        logger.info("smallRightRotation");
         TreeLeaf a = leaf;
-        TreeLeaf b = null;
-        if (leaf.left != null) b = leaf.left;
+        TreeLeaf b = leaf.left;
+//        TreeLeaf b = null;
+//        if (leaf.left != null) b = leaf.left;
         if (leaf.parent != null) {
             if (leaf.parent.left == leaf) {
                 leaf.parent.left = b;
@@ -161,7 +177,8 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
     }
 
     private void bigRightRotation(TreeLeaf leaf) {
-        System.out.println("bigRightRotation");
+//        System.out.println("bigRightRotation");
+        logger.info("bigRightRotation");
         TreeLeaf a = leaf;
 //        TreeLeaf b = leaf.left;
 //        TreeLeaf c = leaf.left.right;
@@ -178,27 +195,34 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
     }
 
     private void smallLeftRotation(TreeLeaf leaf) {
-        System.out.println("smallLeftRotation");
+        logger.info("smallLeftRotation");
         TreeLeaf a = leaf;
         TreeLeaf b = leaf.right;
         if (leaf.parent != null) {
-            leaf.parent.right = b;
-            b.parent = leaf.parent;
+            if (leaf.parent.left == leaf) {
+                leaf.parent.left = b;
+            } else {
+                leaf.parent.right = b;
+            }
+
+//            leaf.parent.right = b;
+            if (b != null) b.parent = leaf.parent;
         } else {
-            b.parent = null;
+            if (b != null) b.parent = null;
             root = b;
         }
         a.parent = b;
-        a.right = b.left;
-        b.left = a;
+        if (b != null) {
+            a.right = b.left;
+            b.left = a;
+        }
 
         runToCalculateHeight(a);
         runToCalculateBalance(a);
     }
 
     private void bigLeftRotation(TreeLeaf leaf) {
-        System.out.println("bigLeftRotation");
-//        smallLeftRotation(leaf);
+        logger.info("bigLeftRotation");
 //        smallLeftRotation(leaf);
     }
 
@@ -206,10 +230,10 @@ public class AvlTree<Key extends Comparable<Key>, Value> implements ITree<Key, V
         return balance2Leaf(leaf.left, leaf.right);
     }
 
-    private int balance2Leaf(TreeLeaf l, TreeLeaf r){
-        if(l == null && r == null) return 0;
-        else if(l == null) return -r.height;
-        else if(r == null) return l.height;
+    private int balance2Leaf(TreeLeaf l, TreeLeaf r) {
+        if (l == null && r == null) return 0;
+        else if (l == null) return -r.height;
+        else if (r == null) return l.height;
         else return l.height - r.height;
     }
 }

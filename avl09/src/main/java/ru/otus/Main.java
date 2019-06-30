@@ -6,12 +6,12 @@ import ru.otus.model.ITree;
 public class Main {
     public static void main(String[] args) {
         ITree<Integer, Integer> tree = new AvlTree<>();
-        tree.insert(9, 1000);
-        tree.insert(3, 1001);
-        tree.insert(5, 1002);
-        tree.insert(1, 1003);
-        tree.insert(0, 1004);
-        tree.insert(10, 1005);
+//        tree.insert(9, 1000);
+//        tree.insert(3, 1001);
+//        tree.insert(5, 1002);
+//        tree.insert(1, 1003);
+//        tree.insert(0, 1004);
+//        tree.insert(10, 1005);
 
 //        tree.rebalance();
 
@@ -30,6 +30,30 @@ public class Main {
 //        tree.insert(7, 1002);
 //        tree.insert(8, 1001);
 //        tree.insert(9, 1000);
+//        tree.insert(10, 1005);
+//        tree.insert(0, 1004);
+//        tree.insert(1, 1003);
+//        tree.insert(5, 1002);
+//        tree.insert(3, 1001);
+//        tree.insert(9, 1000);
+
+
+        tree.insert(10, 1005);
+        tree.insert(0, 1004);
+        tree.insert(15, 1003);
+        tree.insert(5, 1002);
+        tree.insert(13, 1001);
+        tree.insert(9, 1000);
+        tree.insert(4, 10010);
+//        tree.insert(3, 10013);
+
+
+//        tree.insert(8, 10018);
+//        tree.insert(11, 10011);
+
+
         tree.printTree();
+
+        tree.find(5);
     }
 }
